@@ -1,11 +1,13 @@
 package examenii_p2_gabrielzelaya;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import javax.swing.ComboBoxModel;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.DefaultListModel;
+import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.tree.DefaultMutableTreeNode;
@@ -14,6 +16,7 @@ import modelos.Deporte;
 import modelos.Equipo;
 import modelos.Partido;
 import modelos.Torneo;
+import persistencia.datos.ManejoBinarios;
 
 /**
  *
@@ -66,6 +69,8 @@ public class ExamenII extends javax.swing.JFrame {
         jScrollPane1 = new javax.swing.JScrollPane();
         jTree_torneos = new javax.swing.JTree();
         txt_torneos = new javax.swing.JLabel();
+        btn_guardar = new javax.swing.JButton();
+        btn_cargar = new javax.swing.JButton();
 
         crear_deporte.setText("Crear deporte");
         crear_deporte.addActionListener(new java.awt.event.ActionListener() {
@@ -316,18 +321,34 @@ public class ExamenII extends javax.swing.JFrame {
         txt_torneos.setFont(new java.awt.Font("Roboto", 0, 24)); // NOI18N
         txt_torneos.setText("Torneos");
 
+        btn_guardar.setText("Guardar");
+        btn_guardar.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                btn_guardarMouseClicked(evt);
+            }
+        });
+
+        btn_cargar.setText("Cargar");
+
         javax.swing.GroupLayout bg_examenLayout = new javax.swing.GroupLayout(bg_examen);
         bg_examen.setLayout(bg_examenLayout);
         bg_examenLayout.setHorizontalGroup(
             bg_examenLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(bg_examenLayout.createSequentialGroup()
-                .addGap(353, 353, 353)
-                .addComponent(txt_torneos)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, bg_examenLayout.createSequentialGroup()
                 .addContainerGap(94, Short.MAX_VALUE)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 640, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(66, 66, 66))
+            .addGroup(bg_examenLayout.createSequentialGroup()
+                .addGroup(bg_examenLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(bg_examenLayout.createSequentialGroup()
+                        .addGap(353, 353, 353)
+                        .addComponent(txt_torneos))
+                    .addGroup(bg_examenLayout.createSequentialGroup()
+                        .addGap(254, 254, 254)
+                        .addComponent(btn_guardar)
+                        .addGap(160, 160, 160)
+                        .addComponent(btn_cargar)))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         bg_examenLayout.setVerticalGroup(
             bg_examenLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -336,7 +357,11 @@ public class ExamenII extends javax.swing.JFrame {
                 .addComponent(txt_torneos)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(68, 68, 68))
+                .addGap(18, 18, 18)
+                .addGroup(bg_examenLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(btn_guardar)
+                    .addComponent(btn_cargar))
+                .addGap(27, 27, 27))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -550,6 +575,20 @@ public class ExamenII extends javax.swing.JFrame {
         JOptionPane.showMessageDialog(dialog_lista, partidos);
     }//GEN-LAST:event_btn_historialMouseClicked
 
+    private void btn_guardarMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btn_guardarMouseClicked
+       JFileChooser jfc = new JFileChooser("./");
+        int seleccion = jfc.showSaveDialog(this);
+        if (seleccion == JFileChooser.APPROVE_OPTION) {
+            try {
+                File archivo = new File(jfc.getSelectedFile().getPath());
+                ManejoBinarios binario = new ManejoBinarios(archivo, jTree_torneos);
+                binario.escribirBinario(jTree_torneos);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+    }//GEN-LAST:event_btn_guardarMouseClicked
+
     private void agregarDeporteTree(){
         DefaultTreeModel modelo = (DefaultTreeModel) jTree_torneos.getModel();
         DefaultMutableTreeNode raiz = (DefaultMutableTreeNode) modelo.getRoot();
@@ -614,6 +653,8 @@ public class ExamenII extends javax.swing.JFrame {
     private javax.swing.JPanel bg_lista;
     private javax.swing.JPanel bg_simular;
     private javax.swing.JPanel bg_tabla;
+    private javax.swing.JButton btn_cargar;
+    private javax.swing.JButton btn_guardar;
     private javax.swing.JButton btn_historial;
     private javax.swing.JButton btn_registrar;
     private javax.swing.JComboBox<String> cb_equipoLocal;
